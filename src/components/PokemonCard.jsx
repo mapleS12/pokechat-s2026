@@ -20,7 +20,7 @@ steel:'darkblue',
 fairy:'pink',
 }
 
-const PokemonCard = ({pokemonID}) => {
+const PokemonCard = ({pokemonID, showInput=true}) => {
     const [data, setData] = useState(null); // store the result here
     const [inputID, setInputID] = useState(pokemonID); 
     const [currentID, setCurrentID] = useState(pokemonID);
@@ -34,6 +34,11 @@ const PokemonCard = ({pokemonID}) => {
                 setData(response.data);
             });
     }, [currentID]);
+
+    useEffect(()=>{
+        setCurrentID(pokemonID);
+
+    }, [pokemonID]);
 
     // const card_color = COLOR_TYPES[data?.types[0].type.name] || 'grey';
 
@@ -52,25 +57,27 @@ const PokemonCard = ({pokemonID}) => {
     ]
     return (
         <>
+        {showInput &&
         <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
             <Input placeholder='Enter ID' value={inputID} onChange={(e)=>setInputID(e.target.value)} style={{marginBottom:'10px'}} />
             <Button onClick={()=>setCurrentID(inputID)} color='green'>Enter</Button>
         </div>
+}
 
         <Card style={{margin: '10px', width: '200px'}} color={card_color}>
           {/* {pokemonID} */}
-            <div style={{alignItems: 'center', display: 'flex', justifyContent: 'center', background:'#e0e0e0', border:'3px solid ${card_color}'}}>
+            <div style={{alignItems: 'center', display: 'flex', justifyContent: 'center', background:'#e0e0e0', border:`3px solid ${card_color}`}}>
                 <img
                     src={sprites[spriteIdx]}
                     alt={data.name}
                     style={{width:'100%', height:'100%'}}
                 />
                 {
-                    <Button icon='chevron left' onClick={()=>setSpriteIdx((spriteIdx+sprites.length-1)%sprites.length)} style={{position:'absolute', left:'10px', top:'30%'}} size = "3px">
+                    <Button icon='chevron left' onClick={()=>setSpriteIdx((spriteIdx+sprites.length-1)%sprites.length)} style={{position:'absolute', left:'10px', top:'30%'}} size = "mini">
                     </Button>
                 }
                 {
-                    <Button icon='chevron right' onClick={()=>setSpriteIdx((spriteIdx+1)%sprites.length)} style={{position:'absolute', right:'10px', top:'30%'}} size = "3px">
+                    <Button icon='chevron right' onClick={()=>setSpriteIdx((spriteIdx+1)%sprites.length)} style={{position:'absolute', right:'10px', top:'30%'}} size = "mini">
                     </Button>
                 }
             </div>
